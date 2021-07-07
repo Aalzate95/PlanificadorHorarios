@@ -1,0 +1,83 @@
+
+.TableView{
+
+}
+
+.table-style{
+  padding:0;
+}
+
+.table-header{
+  border-radius: 3px;
+  display: grid;
+  justify-content: space-between;
+  text-align: center;
+  background-color:black;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color:white;
+}
+
+.content-table-style{
+  display:flex;
+  flex-direction: column;
+  padding:0;
+}
+
+.table-row,.new-table-row{
+  border-radius: 3px;
+  display: grid;
+  justify-content: space-between;
+  text-align: left;
+  background-color: gray;
+  box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.1);
+  font-size: 14px;
+  margin:2px 0 2px 0
+}
+
+
+.table-row:hover {
+  background-color:#e9e8e8;
+}
+
+.table-header,.table-row{
+  grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.new-table-row{
+    grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+.col1,.col0{
+    text-align: center;
+    padding:10px 4px 5px 4px;
+}
+
+.col1{
+    font-size: 12px;
+}
+
+.col2{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.añadir{
+    text-align: center;
+    margin:0;
+    height:30px;
+    width:30px;
+    font-weight: bold;
+    font-size: 18px;
+    background-color:black;
+    border-radius: 50%;
+    color:white;
+
+}
+
+.añadir:hover{
+    cursor: pointer;
+    opacity:0.8;
+}
