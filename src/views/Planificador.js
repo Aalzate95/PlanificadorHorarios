@@ -3,7 +3,7 @@ import './Planificador.css'
 import { v4 as uuidv4 } from 'uuid';
 
 const CreateNewPersona = ({setPersonas,personas,forceUpdate}) =>{
-    const [nombre,setNombre] = useState()
+    const [nombre,setNombre] = useState("")
     const [horario,setHorario] = useState(
         {
             lunes:{},
@@ -18,22 +18,29 @@ const CreateNewPersona = ({setPersonas,personas,forceUpdate}) =>{
 
     const savePersona = ()=> {
         let newPersonas = personas
-        newPersonas.push(
-            {
-                id:uuidv4(),
-                nombre:nombre,
-                lunes:horario.lunes,
-                martes:horario.martes,
-                miercoles:horario.miercoles,
-                jueves:horario.jueves,
-                viernes:horario.viernes,
-                sabado:horario.sabado,
-                domingo:horario.domingo,
-                total:56
-            })
-        setPersonas(newPersonas)
-        console.log(newPersonas)
-        forceUpdate()
+        if (nombre!==""){
+            newPersonas.push(
+                {
+                    id:uuidv4(),
+                    nombre:nombre,
+                    lunes:horario.lunes,
+                    martes:horario.martes,
+                    miercoles:horario.miercoles,
+                    jueves:horario.jueves,
+                    viernes:horario.viernes,
+                    sabado:horario.sabado,
+                    domingo:horario.domingo,
+                    total:56
+                })
+            setPersonas(newPersonas)
+            setNombre("")
+            forceUpdate()
+            
+            
+        }
+        else{
+            alert("Debe escribir un nombre para poder guardar")
+        }
     }
 
 
@@ -47,7 +54,7 @@ const CreateNewPersona = ({setPersonas,personas,forceUpdate}) =>{
     
     return(
         <li className="new-table-row" >
-            <div className="col0"><input type="text" onChange={(e)=>{setNombre(e.target.value)}} placeholder="Nombre ..."/></div>
+            <div className="col0"><input type="text" value={nombre} onChange={(e)=>{setNombre(e.target.value)}} placeholder="Nombre ..."/></div>
             <div className="col1"><input type="time" onChange={(e)=>{handleChangeHorario("lunes",e.target.value)}}/></div>
             <div className="col1"><input type="time" onChange={(e)=>{handleChangeHorario("martes",e.target.value)}}/></div>
             <div className="col1"><input type="time" onChange={(e)=>{handleChangeHorario("miercoles",e.target.value)}}/></div>
@@ -63,17 +70,31 @@ const CreateNewPersona = ({setPersonas,personas,forceUpdate}) =>{
 
 const Planificador = (props) => {
 
-    const RenderRows = props.personas.map((persona,index)=>{
+    const isFree = (ingreso,salida) =>{
+        if(ingreso === undefined && salida === undefined){
+           return "LIBRE"
+        }
+        return `${ingreso}h - ${salida}h`
+    }
+    const deleteRow = (id) =>{
+        let newPersonas = props.personas
+        newPersonas = newPersonas.filter(persona => persona.id!==id)
+        props.setPersonas(newPersonas)
+    }
+
+    const RenderRows = props.personas.map((persona)=>{
+        console.log(persona)
         return(
-            <li className="table-row" key={index}>
+            <li className="table-row" key={persona.id}>
+                <div className="col1"><button onClick={()=>{deleteRow(persona.id)}}>x</button></div>
                 <div className="col0">{persona.nombre}</div>
-                <div className="col1">{persona.lunes.ingreso} AM -{persona.lunes.salida} PM</div>
-                <div className="col1">{persona.martes.ingreso} AM -{persona.martes.salida} PM</div>
-                <div className="col1">{persona.miercoles.ingreso} AM -{persona.miercoles.salida} PM</div>
-                <div className="col1">{persona.jueves.ingreso} AM -{persona.jueves.salida} PM</div>
-                <div className="col1">{persona.viernes.ingreso} AM -{persona.viernes.salida} PM</div>
-                <div className="col1">{persona.sabado.ingreso} AM -{persona.sabado.salida} PM</div>
-                <div className="col1">{persona.domingo.ingreso} AM -{persona.domingo.salida} PM</div>
+                <div className="col1">{isFree(persona.lunes.ingreso,persona.lunes.salida)}</div>
+                <div className="col1">{isFree(persona.martes.ingreso,persona.martes.salida)}</div>
+                <div className="col1">{isFree(persona.miercoles.ingreso,persona.miercoles.salida)}</div>
+                <div className="col1">{isFree(persona.jueves.ingreso,persona.jueves.salida)}</div>
+                <div className="col1">{isFree(persona.viernes.ingreso,persona.viernes.salida)}</div>
+                <div className="col1">{isFree(persona.sabado.ingreso,persona.sabado.salida)}</div>
+                <div className="col1">{isFree(persona.domingo.ingreso,persona.domingo.salida)}</div>
                 <div className="col1">{persona.total}</div>
             </li>
             )
@@ -84,6 +105,7 @@ const Planificador = (props) => {
             <div className="TableView">
                 <ul className="table-style">
                     <li className="table-header">
+                        <div className="col1"></div>
                         <div className="col0">Nombre</div>
                         <div className="col1">Lunes</div>
                         <div className="col1">Martes</div>
